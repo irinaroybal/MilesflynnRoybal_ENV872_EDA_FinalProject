@@ -1,1 +1,25 @@
-hi
+---
+title: "Final Project: Data Wrangling"
+output: html_document
+---
+
+```{r Setting up environment}
+getwd()
+library(tidyverse)
+```
+```{r Only Big Island Sites}
+CoverClass_Data <- 
+  read.csv("Data/Raw/PACN_EIPS_Cover_Class_Data.csv", stringsAsFactors = FALSE)
+
+CoverClass_BigIsland <- 
+  CoverClass_Data %>%
+  filter(custom_samplingFrame %in% c("Mauna Loa", "Olaa", "Nahuku / East Rift"))
+
+unique(CoverClass_BigIsland$custom_samplingFrame)
+```
+```{r Single date column}
+BigIsland_Clean <- 
+  CoverClass_BigIsland %>%
+  select(-custom_startDate, -custom_eventTimeStart, -custom_eventTimeEnd) %>%
+  rename(Date = custom_endDate)
+```
