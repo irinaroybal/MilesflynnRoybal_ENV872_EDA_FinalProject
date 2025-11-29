@@ -5,10 +5,11 @@ output:
   html_document: default
 ---
 
-```{r Setting up environment}
+```{r Setting Up Environment}
 getwd()
 library(tidyverse)
 ```
+
 ```{r Only Big Island Sites}
 CoverClass_Data <- 
   read.csv("Data/Raw/PACN_EIPS_Cover_Class_Data.csv", stringsAsFactors = FALSE)
@@ -19,6 +20,7 @@ CoverClass_BigIsland <-
 
 unique(CoverClass_BigIsland$custom_samplingFrame)
 ```
+
 ```{r Single Date Column}
 BigIsland_Clean <- 
   CoverClass_BigIsland %>%
