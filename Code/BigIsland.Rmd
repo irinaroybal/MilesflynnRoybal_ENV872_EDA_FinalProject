@@ -27,3 +27,28 @@ BigIsland_Clean <-
   select(-custom_startDate, -custom_eventTimeStart, -custom_eventTimeEnd) %>%
   rename(Date = custom_endDate)
 ```
+
+```{r Mapping Exploration}
+library(sf)
+
+hawaii.counties <- st_read("Data/Raw/cb_2018_us_county_20m.shp")%>%
+filter(STATEFP == 15 )
+
+plot(hawaii.counties)
+
+Hawaii.sf <-
+st_as_sf(BigIsland_Clean,
+coords = c("decimalLongitude","decimalLatitude"),
+crs=26961)
+
+plot(Hawaii.sf)
+
+plots.and.counties <-
+ggplot() +
+geom_sf(data = hawaii.counties,color = "forestgreen", fill = "palegreen3") +
+geom_sf(data = Hawaii.sf, color = "navy", fill = "navy")+
+labs(title = "Plots in Hawaii")
+plots.and.counties
+```
+
+
