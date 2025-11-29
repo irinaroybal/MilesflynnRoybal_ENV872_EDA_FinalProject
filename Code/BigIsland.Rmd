@@ -19,7 +19,7 @@ CoverClass_BigIsland <-
 
 unique(CoverClass_BigIsland$custom_samplingFrame)
 ```
-```{r Single date column}
+```{r Single Date Column}
 BigIsland_Clean <- 
   CoverClass_BigIsland %>%
   select(-custom_startDate, -custom_eventTimeStart, -custom_eventTimeEnd) %>%
