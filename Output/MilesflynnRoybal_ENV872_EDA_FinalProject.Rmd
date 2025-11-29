@@ -1,0 +1,82 @@
+---
+title: "Comparison of Invasive Plant Species and Topography in the Big Island, Hawaii"
+author: "Environmental Data Analytics | Elizabeth Miles-Flynn & Irina Roybal"
+subtitle: "Mauna Loa, Olaa, and Nahuku/East Rift"
+date: "December 10, 2025"
+output:
+  html_document:
+    toc: true
+    toc_depth: 2
+    toc_float: true
+    lof: true
+    lot: true
+    theme: cerulean
+    highlight: tango
+---
+
+```{r setup, include = FALSE}
+#Setup
+library(tidyverse)
+library(lubridate)
+library(here)
+library(knitr)
+
+#Check Working Directory
+getwd()
+here()
+```
+
+### 0.1 Git Repository
+
+<https://github.com/irinaroybal/MilesflynnRoybal_ENV872_EDA_FinalProject.git>
+
+## 1  Rationale and Research Questions
+
+Write 1-2 paragraph(s) detailing the rationale for your study. This should include both the context of the topic as well as a rationale for your choice of dataset (reason for location, variables, etc.). You may choose to include citations if you like (optional).
+
+At the end of your rationale, introduce a numbered list of your questions (or an overarching question and sub-questions).
+
+## 2  Dataset Information
+
+```{r dataset.information, fig.cap = "Table 2.1: Dataset Information on PACN EIPS Cover Class Data", echo = FALSE}
+
+#Create a dataframe with dataset information
+Dataset.Information <- data.frame (
+  Detail = c("Name", "Publisher", "Retrieved From", "Variables Used", "Date Range"),
+  Description = c("Pacific Island Network Established Invasive Plant Species Monitoring Dataset 2010-2022", "National Park Service", "https://catalog.data.gov/dataset/pacific-island-network-established-invasive-plant-species-monitoring-dataset-2010-2022", "Plant Community, Sampling Frame, Decimal Latitude, Decimal Longitude, Date, Species Code, Scientific Name, Vernacular Name, Life Form", "October 4, 2010 to September 7, 2023")
+)
+
+#Create a table 
+knitr::kable(Dataset.Information,
+             col.names = c("Detail", "Description"),
+             caption = "Table 2.1: Dataset Information on PACN EIPS Cover Class Data",
+             digits = 2)
+```
+
+## 3  Exploratory Analysis
+Instructions [Insert exploratory visualizations of your dataset. This may include, but is not limited to, graphs illustrating the distributions of variables of interest and/or maps of the spatial context of your dataset. Format your R chunks so that graphs are displayed but code is not displayed. Accompany these graphs with text sections that describe the visualizations and provide context for further analyses.
+
+Each figure should be accompanied by a caption, and each figure should be referenced within the text.
+
+Scope: think about what information someone might want to know about the dataset before analyzing it statistically. How might you visualize this information?]
+
+### 3.1 Exploration of Raw Data
+
+```{r Raw Data, echo = FALSE}
+CoverClass_Data <- 
+  read.csv("Data/Raw/PACN_EIPS_Cover_Class_Data.csv", stringsAsFactors = FALSE)
+
+dim(CoverClass_Data)
+summary(CoverClass_Data$custom_samplingFrame)
+
+```
+
+### 3.2 Data Wrangling
+
+## 4  Analysis
+Instructions [Insert visualizations and text describing your main analyses. Format your R chunks so that graphs are displayed but code and other output is not displayed. Instead, describe the results of any statistical tests in the main text (e.g., “Variable x was significantly different among y groups (ANOVA; df = 300, F = 5.55, p < 0.0001)”). Each paragraph, accompanied by one or more visualizations, should describe the major findings and how they relate to the question and hypotheses. Divide this section into subsections, one for each research question.
+
+Each figure should be accompanied by a caption, and each figure should be referenced within the text]
+
+## 5  Summary and Conclusions
+Instructions [Summarize your major findings from your analyses in a few paragraphs. What conclusions do you draw from your findings? Relate your findings back to the original research questions and rationale.]

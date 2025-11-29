@@ -1,6 +1,8 @@
 ---
-title: "Final Project: Data Wrangling"
-output: html_document
+title: 'Final Project: Data Wrangling'
+output:
+  pdf_document: default
+  html_document: default
 ---
 
 ```{r Setting up environment}
