@@ -45,24 +45,59 @@ write.csv(BigIsland_Processed, "Data/Processed/BigIsland_Processed.csv", row.nam
 ```{r Mapping Exploration}
 library(sf)
 
+hawaiitheme <- 
+   theme(
+    plot.background = element_rect(fill = "white"),
+    legend.background = element_rect(fill = "white"),
+    legend.title = element_text(color = "black", 
+                                face = "bold",
+                                family = "serif"),
+    legend.text = element_text(color = "black",
+                               family = "serif"),
+    panel.background = element_rect(fill = "cyan3"),
+    panel.grid.major = element_line(color = "lightblue2"),
+    panel.grid.minor = element_line(color = "lightblue2"),
+    plot.title = element_text(face = "bold",
+                              size = 16,
+                              color = "black",
+                              family = "serif"),
+    axis.title.x  = element_text(
+                               face = "italic", 
+                               size = 8, 
+                               color = "black",
+                               family = "serif"),
+    axis.title.y = element_text( 
+                               face = "italic", 
+                               size = 8, 
+                               color = "black",
+                               family = "serif"),
+  )
+  
 hawaii.counties <- st_read("Data/Raw/cb_2018_us_county_20m.shp")%>%
 filter(STATEFP == 15 )
 
-plot(hawaii.counties)
+big_island <- hawaii.counties %>% 
+  filter(NAME == "Hawaii")
 
-Hawaii.sf <-
-st_as_sf(BigIsland_Clean,
-coords = c("decimalLongitude","decimalLatitude"),
-crs=26961)
 
-plot(Hawaii.sf)
+sites_sf <- st_as_sf(BigIsland_Processed, coords = c("Decimal_Longitude","Decimal_Latitude"), crs = 4326) 
 
-plots.and.counties <-
 ggplot() +
-geom_sf(data = hawaii.counties,color = "forestgreen", fill = "palegreen3") +
-geom_sf(data = Hawaii.sf, color = "navy", fill = "navy")+
-labs(title = "Plots in Hawaii")
-plots.and.counties
+  geom_sf(data=big_island, fill="palegreen",
+          color="forestgreen") +
+  geom_sf(data = sites_sf, 
+          aes(color = BigIsland_Processed$Sampling_Frame), 
+          size = 2) +
+  hawaiitheme+
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))+
+  labs(title = "Sampling Locations on the Big Island",
+       color = "Sampling Sites")
 ```
+
+
+
+
+
+
 
 
