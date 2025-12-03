@@ -78,10 +78,11 @@ After preliminary raw data exploration, we wrangled and saved the processed data
 
 ## 4 Analysis
 
-Instructions [Insert visualizations and text describing your main analyses. Format your R chunks so that graphs are displayed but code and other output is not displayed. Instead, describe the results of any statistical tests in the main text (e.g., “Variable x was significantly different among y groups (ANOVA; df = 300, F = 5.55, p \< 0.0001)”). Each paragraph, accompanied by one or more visualizations, should describe the major findings and how they relate to the question and hypotheses. Divide this section into subsections, one for each research question.
+### 4.1 Diversity of invasive species across habitat type
 
-Each figure should be accompanied by a caption, and each figure should be referenced within the text]
+### 4.2 Time series of invasive plants 
+
 
 ## 5 Summary and Conclusions
 
-Instructions [Summarize your major findings from your analyses in a few paragraphs. What conclusions do you draw from your findings? Relate your findings back to the original research questions and rationale.]
+## 6 References
