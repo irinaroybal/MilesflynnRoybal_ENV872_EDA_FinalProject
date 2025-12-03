@@ -28,20 +28,6 @@ BigIsland_Clean <-
   rename(Date = custom_endDate)
 ```
 
-```{r Processed with only 10 chosen variables and remove NA}
-BigIsland_Processed <- BigIsland_Clean %>%
-  select(custom_plantCommunity, custom_samplingFrame, decimalLatitude, decimalLongitude, geodeticDatum, Date, custom_speciesCode, scientificName, vernacularName, custom_lifeForm) %>%
-  drop_na()
-
-colnames(BigIsland_Processed) <- c("Plant_Community", "Sampling_Frame", "Decimal_Latitude", "Decimal_Longitude", "GeodeticDatum", "Date", "Species_Code", "Scientific_Name", "Vernacular_Name", "Life_Form")
-
-BigIsland_Processed$Date <- ymd(BigIsland_Processed$Date)
-class(BigIsland_Processed$Date)
-
-write.csv(BigIsland_Processed, "Data/Processed/BigIsland_Processed.csv", row.names = FALSE)
-
-```
-
 ```{r Mapping Exploration}
 library(sf)
 

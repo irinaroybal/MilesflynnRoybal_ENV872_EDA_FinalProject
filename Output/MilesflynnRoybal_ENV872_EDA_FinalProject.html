@@ -1466,15 +1466,41 @@ Topography in the Big Island, Hawaii</h1>
 </div>
 <div id="rationale-and-research-questions" class="section level2">
 <h2>1 Rationale and Research Questions</h2>
-<p>Write 1-2 paragraph(s) detailing the rationale for your study. This
-should include both the context of the topic as well as a rationale for
-your choice of dataset (reason for location, variables, etc.). You may
-choose to include citations if you like (optional).</p>
-<p>At the end of your rationale, introduce a numbered list of your
-questions (or an overarching question and sub-questions).</p>
+<p>The purpose of this study is to analyze the spatial relationship of
+invasive species across three different study sites on the Big Island of
+Hawaii. Before Polynesian contact with the remote Pacific, invasive
+species colonized islands at a rate of one species every 50,000 years.
+Once Polynesians arrived, this rate increased to three to four species
+every hundred years (Young 2016). Since European colonization, this rate
+has erupted to around twenty invasive species introduced each year in
+Hawaii (Ewell 1999). Invasive species, defined as a non-native organism
+that spreads rapidly and/or causes harm to the environment, are a
+considerable threat to the native biota of Hawaii. Of the Hawaiian
+Islands’ 10,000 native species, nearly 90% are endemic (Cordell 2021).
+This includes about 1,367 endemic taxa of vascular plants.</p>
+<p>Our goal is to evaluate the present-day rate of invasive species
+introduction in the Big Island over the past decade to inform best
+management practices to protect endemic species of the Hawaiian Islands.
+Our dataset includes three sites on the Big Island: Mauna Loa, Ola’a,
+and Nahuku. Mauna Loa is classified as a subalpine shrubland, and Ola’a
+and Nahuku are considered wet forests. Our dataset ranges from 2010 to
+2023 and contains coordinates for each site. Through our analysis, we
+aim to answer the following research questions:</p>
+<ol style="list-style-type: decimal">
+<li><p>Does diversity of invasive species change across different
+habitat types (wet forest and subalpine shrubland)?</p></li>
+<li><p>How does invasive species concentration and diversity change over
+time?</p></li>
+</ol>
 </div>
 <div id="dataset-information" class="section level2">
 <h2>2 Dataset Information</h2>
+<p>Raw data was derived from the United States Government’s open data
+site starting from October 4th, 2010 to September 7th, 2023. This
+dataset is part of The Pacific Island Inventory and Monitoring Network
+(PACN) Established Invasive Plant Species (EIPS) Monitoring Protocol.
+More information on the sources used can be found in the table
+below:</p>
 <table>
 <caption>Table 2.1: Dataset Information on PACN EIPS Cover Class
 Data</caption>
@@ -1517,26 +1543,74 @@ Life Form</td>
 </div>
 <div id="exploratory-analysis" class="section level2">
 <h2>3 Exploratory Analysis</h2>
-<p>Instructions [Insert exploratory visualizations of your dataset. This
-may include, but is not limited to, graphs illustrating the
-distributions of variables of interest and/or maps of the spatial
-context of your dataset. Format your R chunks so that graphs are
-displayed but code is not displayed. Accompany these graphs with text
-sections that describe the visualizations and provide context for
-further analyses.</p>
-<p>Each figure should be accompanied by a caption, and each figure
-should be referenced within the text.</p>
-<p>Scope: think about what information someone might want to know about
-the dataset before analyzing it statistically. How might you visualize
-this information?]</p>
 <div id="exploration-of-raw-data" class="section level3">
 <h3>3.1 Exploration of Raw Data</h3>
-<pre><code>## [1] 37977    33</code></pre>
-<pre><code>##    Length     Class      Mode 
-##     37977 character character</code></pre>
+<p>The raw dataset included 33 total variables focus on describing the
+status of non-native plant richness, frequency, and cover.</p>
+<pre><code>##  [1] &quot;samplingProtocol&quot;        &quot;year&quot;                   
+##  [3] &quot;custom_cycle&quot;            &quot;custom_unitCode&quot;        
+##  [5] &quot;custom_plantCommunity&quot;   &quot;custom_samplingFrame&quot;   
+##  [7] &quot;custom_transectType&quot;     &quot;custom_transectNumber&quot;  
+##  [9] &quot;decimalLatitude&quot;         &quot;decimalLongitude&quot;       
+## [11] &quot;geodeticDatum&quot;           &quot;custom_startDate&quot;       
+## [13] &quot;custom_endDate&quot;          &quot;custom_eventTimeStart&quot;  
+## [15] &quot;custom_eventTimeEnd&quot;     &quot;recordedBy&quot;             
+## [17] &quot;eventRemarks&quot;            &quot;custom_segment&quot;         
+## [19] &quot;occurrenceRemarks&quot;       &quot;custom_coverClass&quot;      
+## [21] &quot;custom_dead&quot;             &quot;custom_cf&quot;              
+## [23] &quot;identificationQualifier&quot; &quot;custom_speciesCode&quot;     
+## [25] &quot;scientificName&quot;          &quot;vernacularName&quot;         
+## [27] &quot;custom_lifeForm&quot;         &quot;establishmentMeans&quot;     
+## [29] &quot;custom_certified&quot;        &quot;custom_certifiedBy&quot;     
+## [31] &quot;custom_certifiedDate&quot;    &quot;eventID&quot;                
+## [33] &quot;locationID&quot;</code></pre>
+<pre><code>## &#39;data.frame&#39;:    37977 obs. of  33 variables:
+##  $ samplingProtocol       : chr  &quot;Established Invasive Plant Species&quot; &quot;Established Invasive Plant Species&quot; &quot;Established Invasive Plant Species&quot; &quot;Established Invasive Plant Species&quot; ...
+##  $ year                   : int  2010 2010 2010 2010 2010 2010 2010 2010 2010 2010 ...
+##  $ custom_cycle           : int  1 1 1 1 1 1 1 1 1 1 ...
+##  $ custom_unitCode        : chr  &quot;HAVO&quot; &quot;HAVO&quot; &quot;HAVO&quot; &quot;HAVO&quot; ...
+##  $ custom_plantCommunity  : chr  &quot;Wet Forest&quot; &quot;Wet Forest&quot; &quot;Wet Forest&quot; &quot;Wet Forest&quot; ...
+##  $ custom_samplingFrame   : chr  &quot;Nahuku / East Rift&quot; &quot;Nahuku / East Rift&quot; &quot;Nahuku / East Rift&quot; &quot;Nahuku / East Rift&quot; ...
+##  $ custom_transectType    : chr  &quot;Fixed&quot; &quot;Fixed&quot; &quot;Fixed&quot; &quot;Fixed&quot; ...
+##  $ custom_transectNumber  : chr  &quot;1&quot; &quot;1&quot; &quot;1&quot; &quot;1&quot; ...
+##  $ decimalLatitude        : num  19.4 19.4 19.4 19.4 19.4 ...
+##  $ decimalLongitude       : num  -155 -155 -155 -155 -155 ...
+##  $ geodeticDatum          : chr  &quot;EPSG: 4326&quot; &quot;EPSG: 4326&quot; &quot;EPSG: 4326&quot; &quot;EPSG: 4326&quot; ...
+##  $ custom_startDate       : chr  &quot;2010-11-15&quot; &quot;2010-11-15&quot; &quot;2010-11-15&quot; &quot;2010-11-15&quot; ...
+##  $ custom_endDate         : chr  &quot;2010-11-15&quot; &quot;2010-11-15&quot; &quot;2010-11-15&quot; &quot;2010-11-15&quot; ...
+##  $ custom_eventTimeStart  : chr  NA NA NA NA ...
+##  $ custom_eventTimeEnd    : chr  NA NA NA NA ...
+##  $ recordedBy             : chr  &quot;Adam Mehlhorn | Bret Callaway | Daemerson Awong&quot; &quot;Adam Mehlhorn | Bret Callaway | Daemerson Awong&quot; &quot;Adam Mehlhorn | Bret Callaway | Daemerson Awong&quot; &quot;Adam Mehlhorn | Bret Callaway | Daemerson Awong&quot; ...
+##  $ eventRemarks           : chr  NA NA NA NA ...
+##  $ custom_segment         : chr  &quot;0 - 20&quot; &quot;20 - 40&quot; &quot;40 - 60&quot; &quot;60 - 80&quot; ...
+##  $ occurrenceRemarks      : chr  NA NA NA NA ...
+##  $ custom_coverClass      : chr  &quot;2&quot; &quot;2&quot; &quot;1&quot; NA ...
+##  $ custom_dead            : int  0 0 0 0 0 0 0 0 0 0 ...
+##  $ custom_cf              : int  0 0 0 0 0 0 0 0 0 0 ...
+##  $ identificationQualifier: int  NA NA NA NA NA NA NA NA NA NA ...
+##  $ custom_speciesCode     : chr  &quot;MORFAY&quot; &quot;MORFAY&quot; &quot;MORFAY&quot; NA ...
+##  $ scientificName         : chr  &quot;Morella faya&quot; &quot;Morella faya&quot; &quot;Morella faya&quot; NA ...
+##  $ vernacularName         : chr  &quot;fire tree&quot; &quot;fire tree&quot; &quot;fire tree&quot; NA ...
+##  $ custom_lifeForm        : chr  &quot;Tree&quot; &quot;Tree&quot; &quot;Tree&quot; NA ...
+##  $ establishmentMeans     : chr  &quot;Non-Native&quot; &quot;Non-Native&quot; &quot;Non-Native&quot; NA ...
+##  $ custom_certified       : int  1 1 1 1 1 1 1 1 1 1 ...
+##  $ custom_certifiedBy     : chr  &quot;Alison Ainsworth&quot; &quot;Alison Ainsworth&quot; &quot;Alison Ainsworth&quot; &quot;Alison Ainsworth&quot; ...
+##  $ custom_certifiedDate   : chr  &quot;2012-09-18&quot; &quot;2012-09-18&quot; &quot;2012-09-18&quot; &quot;2012-09-18&quot; ...
+##  $ eventID                : chr  &quot;20110104121500-709037899.971008&quot; &quot;20110104121500-709037899.971008&quot; &quot;20110104121500-709037899.971008&quot; &quot;20110104121500-709037899.971008&quot; ...
+##  $ locationID             : chr  &quot;20110104121020-533424019.813538&quot; &quot;20110104121020-533424019.813538&quot; &quot;20110104121020-533424019.813538&quot; &quot;20110104121020-533424019.813538&quot; ...</code></pre>
+</div>
+<div id="study-site" class="section level3">
+<h3>3.2 Study Site</h3>
+<p>Out of five Hawaiian national parks, we only selected three sites
+with wet forest and subalpine shrublands habitats that followed the same
+methodology of counting all non-native plant species found within
+5-by-20 meter plots at each site.</p>
 </div>
 <div id="data-wrangling" class="section level3">
-<h3>3.2 Data Wrangling</h3>
+<h3>3.3 Data Wrangling</h3>
+<p>After preliminary raw data exploration, we wrangled and saved the
+processed dataset as “BigIsland.Rmd” to better suit our subsequent
+analyses.</p>
 </div>
 </div>
 <div id="analysis" class="section level2">

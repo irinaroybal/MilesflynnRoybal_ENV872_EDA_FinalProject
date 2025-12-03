@@ -30,13 +30,18 @@ here()
 
 <https://github.com/irinaroybal/MilesflynnRoybal_ENV872_EDA_FinalProject.git>
 
-## 1  Rationale and Research Questions
+## 1 Rationale and Research Questions
 
-Write 1-2 paragraph(s) detailing the rationale for your study. This should include both the context of the topic as well as a rationale for your choice of dataset (reason for location, variables, etc.). You may choose to include citations if you like (optional).
+The purpose of this study is to analyze the spatial relationship of invasive species across three different study sites on the Big Island of Hawaii. Before Polynesian contact with the remote Pacific, invasive species colonized islands at a rate of one species every 50,000 years. Once Polynesians arrived, this rate increased to three to four species every hundred years (Young 2016). Since European colonization, this rate has erupted to around twenty invasive species introduced each year in Hawaii (Ewell 1999). Invasive species, defined as a non-native organism that spreads rapidly and/or causes harm to the environment, are a considerable threat to the native biota of Hawaii. Of the Hawaiian Islands’ 10,000 native species, nearly 90% are endemic (Cordell 2021). This includes about 1,367 endemic taxa of vascular plants. 
 
-At the end of your rationale, introduce a numbered list of your questions (or an overarching question and sub-questions).
+Our goal is to evaluate the present-day rate of invasive species introduction in the Big Island over the past decade to inform best management practices to protect endemic species of the Hawaiian Islands. Our dataset includes three sites on the Big Island: Mauna Loa, Ola’a, and Nahuku. Mauna Loa is classified as a subalpine shrubland, and Ola’a and Nahuku are considered wet forests. Our dataset ranges from 2010 to 2023 and contains coordinates for each site. Through our analysis, we aim to answer the following research questions:
 
-## 2  Dataset Information
+1.  Does diversity of invasive species change across different habitat types (wet forest and subalpine shrubland)?
+
+2.  How does invasive species concentration and diversity change over time?
+
+## 2 Dataset Information
+Raw data was derived from the United States Government's open data site starting from October 4th, 2010 to September 7th, 2023. This dataset is part of The Pacific Island Inventory and Monitoring Network (PACN) Established Invasive Plant Species (EIPS) Monitoring Protocol. More information on the sources used can be found in the table below: 
 
 ```{r dataset.information, fig.cap = "Table 2.1: Dataset Information on PACN EIPS Cover Class Data", echo = FALSE}
 
@@ -52,31 +57,31 @@ knitr::kable(Dataset.Information,
              caption = "Table 2.1: Dataset Information on PACN EIPS Cover Class Data",
              digits = 2)
 ```
+## 3 Exploratory Analysis
 
-## 3  Exploratory Analysis
-Instructions [Insert exploratory visualizations of your dataset. This may include, but is not limited to, graphs illustrating the distributions of variables of interest and/or maps of the spatial context of your dataset. Format your R chunks so that graphs are displayed but code is not displayed. Accompany these graphs with text sections that describe the visualizations and provide context for further analyses.
 
-Each figure should be accompanied by a caption, and each figure should be referenced within the text.
-
-Scope: think about what information someone might want to know about the dataset before analyzing it statistically. How might you visualize this information?]
 
 ### 3.1 Exploration of Raw Data
-
+The raw dataset included 33 total variables focus on describing the status of non-native plant richness, frequency, and cover. 
 ```{r Raw Data, echo = FALSE}
 CoverClass_Data <- 
   read.csv("Data/Raw/PACN_EIPS_Cover_Class_Data.csv", stringsAsFactors = FALSE)
 
-dim(CoverClass_Data)
-summary(CoverClass_Data$custom_samplingFrame)
-
+str(CoverClass_Data)
 ```
+### 3.2 Study Site
+Out of five Hawaiian national parks, we only selected three sites with wet forest and subalpine shrublands habitats that followed the same methodology of counting all non-native plant species found within 5-by-20 meter plots at each site.
 
-### 3.2 Data Wrangling
+### 3.3 Data Wrangling
 
-## 4  Analysis
-Instructions [Insert visualizations and text describing your main analyses. Format your R chunks so that graphs are displayed but code and other output is not displayed. Instead, describe the results of any statistical tests in the main text (e.g., “Variable x was significantly different among y groups (ANOVA; df = 300, F = 5.55, p < 0.0001)”). Each paragraph, accompanied by one or more visualizations, should describe the major findings and how they relate to the question and hypotheses. Divide this section into subsections, one for each research question.
+After preliminary raw data exploration, we wrangled and saved the processed dataset as “BigIsland.Rmd” to better suit our subsequent analyses. 
+
+## 4 Analysis
+
+Instructions [Insert visualizations and text describing your main analyses. Format your R chunks so that graphs are displayed but code and other output is not displayed. Instead, describe the results of any statistical tests in the main text (e.g., “Variable x was significantly different among y groups (ANOVA; df = 300, F = 5.55, p \< 0.0001)”). Each paragraph, accompanied by one or more visualizations, should describe the major findings and how they relate to the question and hypotheses. Divide this section into subsections, one for each research question.
 
 Each figure should be accompanied by a caption, and each figure should be referenced within the text]
 
-## 5  Summary and Conclusions
+## 5 Summary and Conclusions
+
 Instructions [Summarize your major findings from your analyses in a few paragraphs. What conclusions do you draw from your findings? Relate your findings back to the original research questions and rationale.]
