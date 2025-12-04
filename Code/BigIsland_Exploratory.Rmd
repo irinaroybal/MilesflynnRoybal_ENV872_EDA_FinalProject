@@ -70,8 +70,7 @@ hawaiitheme <-
                                face = "italic", 
                                size = 8, 
                                color = "black",
-                               family = "serif"),
-  )
+                               family = "serif"))
   
 hawaii.counties <- st_read("Data/Raw/cb_2018_us_county_20m.shp")%>%
 filter(STATEFP == 15 )
@@ -92,6 +91,37 @@ ggplot() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))+
   labs(title = "Sampling Locations on the Big Island",
        color = "Sampling Sites")
+```
+```{r Mauna Loa Closer Look}
+
+MaunaLoa_subset <- 
+  BigIsland_Processed%>%
+  filter(Sampling_Frame == "Mauna Loa")%>%
+  filter(Date == "2011-05-19")
+
+maunaloa_sites_sf <- st_as_sf(MaunaLoa_subset, coords = c("Decimal_Longitude","Decimal_Latitude"), crs = 4326) 
+
+```
+
+```{r Specific Species Mapping Exploration}
+HiloGrass_subset <- 
+  BigIsland_Processed%>%
+  filter(Vernacular_Name == "Hilo grass")
+
+sites_sf <- st_as_sf(HiloGrass_subset, coords = c("Decimal_Longitude","Decimal_Latitude"), crs = 4326) 
+
+ggplot() +
+  geom_sf(data=big_island, fill="palegreen",
+          color="forestgreen") +
+  geom_sf(data = sites_sf, 
+          aes(color = HiloGrass_subset$Sampling_Frame), 
+          size = 2) +
+  hawaiitheme+
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))+
+  labs(title = "Sampling Locations on the Big Island",
+       color = "Sampling Sites")
+
+#could make maps of species common in 2 of 3 sites, a map of one species year by year in one sampling site, etc.
 ```
 
 
