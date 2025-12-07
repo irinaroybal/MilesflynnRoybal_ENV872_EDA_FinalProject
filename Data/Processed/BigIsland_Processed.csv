@@ -1,4 +1,4 @@
-"Plant_Community","Sampling_Frame","Decimal_Latitude","Decimal_Longitude","GeodeticDatum","Date","Species_Code","Scientific_Name","Vernacular_Name","Life_Form"
+"Plant_Community","Sampling_Frame","Decimal_Latitude","Decimal_Longitude","GeodeticDatum","Date","Species_Code","Scientific_Name","Vernacular_Name","Vegetation_Type"
 "Wet Forest","Nahuku / East Rift",19.386043,-155.229628,"EPSG: 4326",2010-11-15,"MORFAY","Morella faya","fire tree","Tree"
 "Wet Forest","Nahuku / East Rift",19.386043,-155.229628,"EPSG: 4326",2010-11-15,"MORFAY","Morella faya","fire tree","Tree"
 "Wet Forest","Nahuku / East Rift",19.386043,-155.229628,"EPSG: 4326",2010-11-15,"MORFAY","Morella faya","fire tree","Tree"
