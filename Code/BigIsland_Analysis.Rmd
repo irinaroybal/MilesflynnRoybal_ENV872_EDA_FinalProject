@@ -221,10 +221,22 @@ print(Vine_Abundance)
 
 ```{r Research Question 1 - One-way ANOVA statistical analysis, echo = FALSE}
 ### Struggling to find a statistical test that will best represent our data since we have "character" type data and not "numeric". This can be achieved by calculating the sum count of species richness for each site?
+
+#ANOVA test on overall richness between sites. Ola'a has significantly higher invasive species richness in comparison to Mauna Loa. 
+Richness <- BigIsland_Clean %>%
+  group_by(custom_samplingFrame, custom_transectNumber) %>%
+  summarise(Richness = n_distinct(vernacularName), .groups = "drop")
+
+anova_model <- aov(Richness ~ custom_samplingFrame, data = Richness)
+summary(anova_model)
+
+TukeyHSD(anova_model)
 ```
 
 ```{r Research Question 1 - Dominance and Spread, echo = FALSE}
 ### not really sure how to represent this... spatial???
+
+#visual comparison of one site to another, or points where we saw life form type (could do year to year comparison)
 ```
 
 ```{r Research Question 2 - time series analysis, echo = FALSE}

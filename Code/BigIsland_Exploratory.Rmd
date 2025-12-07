@@ -118,10 +118,11 @@ ggplot() +
           size = 2) +
   hawaiitheme+
   theme(axis.text.x = element_text(angle = 45, hjust = 1))+
-  labs(title = "Sampling Locations on the Big Island",
+  labs(title = "Hilo Grass Records in Sampling Sites",
        color = "Sampling Sites")
 
 #could make maps of species common in 2 of 3 sites, a map of one species year by year in one sampling site, etc.
+#difficult to map different species at one site becuase all have the same transect coordinates given the sampling date. 
 ```
 
 
