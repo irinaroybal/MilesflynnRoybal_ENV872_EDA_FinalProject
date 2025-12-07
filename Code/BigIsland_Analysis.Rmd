@@ -231,6 +231,21 @@ anova_model <- aov(Richness ~ custom_samplingFrame, data = Richness)
 summary(anova_model)
 
 TukeyHSD(anova_model)
+
+#ANOVA test on  number of Life Forms 
+VegTypeANOVA <- BigIsland_Clean %>%
+  group_by(custom_samplingFrame, custom_transectNumber) %>%
+  summarise(Richness = n_distinct(custom_lifeForm), .groups = "drop")
+
+anova_model2 <- aov(Richness ~ custom_samplingFrame, data = VegTypeANOVA)
+summary(anova_model2)
+
+TukeyHSD(anova_model2)
+
+#findings: all statistically significant
+##mauna loa has the least structural diversity (i.e tree + shrub + fern + grass (richness score of 4) versus just grass + shrub (richness score of 2))
+###nahuku east rift is moderately diverse
+###olaa is the is the most diverse in number of life form types at a given sampling point
 ```
 
 ```{r Research Question 1 - Dominance and Spread, echo = FALSE}
