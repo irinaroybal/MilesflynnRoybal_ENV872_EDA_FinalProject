@@ -235,9 +235,9 @@ TukeyHSD(anova_model)
 #ANOVA test on  number of Life Forms 
 VegTypeANOVA <- BigIsland_Clean %>%
   group_by(custom_samplingFrame, custom_transectNumber) %>%
-  summarise(Richness = n_distinct(custom_lifeForm), .groups = "drop")
+  summarise(Diversity = n_distinct(custom_lifeForm), .groups = "drop")
 
-anova_model2 <- aov(Richness ~ custom_samplingFrame, data = VegTypeANOVA)
+anova_model2 <- aov(Diversity ~ custom_samplingFrame, data = VegTypeANOVA)
 summary(anova_model2)
 
 TukeyHSD(anova_model2)
