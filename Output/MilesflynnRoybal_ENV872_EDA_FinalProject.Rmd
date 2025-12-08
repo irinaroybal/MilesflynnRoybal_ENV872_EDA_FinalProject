@@ -105,10 +105,13 @@ str(CoverClass_Data)
 
 Three regions within Hawai‘i Volcanoes National Park were selected as the Big Island contained the most sampling sites out of all the Hawaiian Islands in the dataset. All invasive plant species were counted within 5 × 20 m plots at each site, allowing for comparison between wet forest and subalpine shrubland habitats. *Figure 1* displays a Landsat mosaic of the approximate location and average elevation of our three study regions. In *Figure 2*, sampling sites are color-coded by region. Mauna Loa, the subalpine shrubland, is depicted in orange. Wet forest habitat types are shown in blue, with Nāhuku/East Rift in light blue and Ola‘a in dark blue.
 
-```{r Image, fig.cap="Figure 3.2: Landsat Mosaic of Big Island of Hawaii, Average Elevation (m)", out.width = "50%", echo = FALSE, messages = FALSE}
-knitr::include_graphics("Data/Processed/BigIsland.png")
 
-```
+## Landsat Mosaic of Big Island Sampling Regions, Average Elevation in Meters
+
+![The image]
+(https://raw.githubusercontent.com/irinaroybal/MilesflynnRoybal_ENV872_EDA_FinalProject/refs/heads/main/Data/Processed/BigIsland.png)
+
+
 
 ```{r Map of Sampling Sites, fig.cap = "Map showing the sampling sites are color-coded by region", echo = FALSE}
 
