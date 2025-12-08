@@ -26,6 +26,8 @@ BigIsland_Clean <-
   CoverClass_BigIsland %>%
   select(-custom_startDate, -custom_eventTimeStart, -custom_eventTimeEnd) %>%
   rename(Date = custom_endDate)
+
+write.csv(BigIsland_Clean, file = "~/MilesflynnRoybal_ENV872_EDA_FinalProject.git/Data/Processed/BigIsland_Clean.csv", row.names = FALSE)
 ```
 
 ```{r Processed with only 10 chosen variables and remove NA}
@@ -33,7 +35,7 @@ BigIsland_Processed <- BigIsland_Clean %>%
   select(custom_plantCommunity, custom_samplingFrame, decimalLatitude, decimalLongitude, geodeticDatum, Date, custom_speciesCode, scientificName, vernacularName, custom_lifeForm) %>%
   drop_na()
 
-colnames(BigIsland_Processed) <- c("Plant_Community", "Sampling_Frame", "Decimal_Latitude", "Decimal_Longitude", "GeodeticDatum", "Date", "Species_Code", "Scientific_Name", "Vernacular_Name", "Life_Form")
+colnames(BigIsland_Processed) <- c("Plant_Community", "Sampling_Frame", "Decimal_Latitude", "Decimal_Longitude", "GeodeticDatum", "Date", "Species_Code", "Scientific_Name", "Vernacular_Name", "Vegetation_Type")
 
 BigIsland_Processed$Date <- ymd(BigIsland_Processed$Date)
 class(BigIsland_Processed$Date)
@@ -82,16 +84,22 @@ big_island <- hawaii.counties %>%
 sites_sf <- st_as_sf(BigIsland_Processed, coords = c("Decimal_Longitude","Decimal_Latitude"), crs = 4326) 
 
 ggplot() +
-  geom_sf(data=big_island, fill="palegreen",
+  geom_sf(data=big_island, fill="lightgreen",
           color="forestgreen") +
   geom_sf(data = sites_sf, 
           aes(color = BigIsland_Processed$Sampling_Frame), 
           size = 2) +
+  scale_color_manual(
+  values = c(
+    "Mauna Loa" = "orange2",
+    "Nahuku / East Rift" = "lightblue",
+    "Olaa" = "steelblue" ))+
   hawaiitheme+
   theme(axis.text.x = element_text(angle = 45, hjust = 1))+
   labs(title = "Sampling Locations on the Big Island",
        color = "Sampling Sites")
 ```
+
 ```{r Mauna Loa Closer Look}
 
 MaunaLoa_subset <- 
@@ -111,18 +119,23 @@ HiloGrass_subset <-
 sites_sf <- st_as_sf(HiloGrass_subset, coords = c("Decimal_Longitude","Decimal_Latitude"), crs = 4326) 
 
 ggplot() +
-  geom_sf(data=big_island, fill="palegreen",
+  geom_sf(data=big_island, fill="wheat4",
           color="forestgreen") +
   geom_sf(data = sites_sf, 
           aes(color = HiloGrass_subset$Sampling_Frame), 
           size = 2) +
+   scale_color_manual(
+  values = c(
+    "Mauna Loa" = "orange2",
+    "Nahuku / East Rift" = "lightblue",
+    "Olaa" = "steelblue" ))+
   hawaiitheme+
   theme(axis.text.x = element_text(angle = 45, hjust = 1))+
   labs(title = "Hilo Grass Records in Sampling Sites",
        color = "Sampling Sites")
 
 #could make maps of species common in 2 of 3 sites, a map of one species year by year in one sampling site, etc.
-#difficult to map different species at one site becuase all have the same transect coordinates given the sampling date. 
+#difficult to map different species at one site because all have the same transect coordinates given the sampling date. 
 ```
 
 
