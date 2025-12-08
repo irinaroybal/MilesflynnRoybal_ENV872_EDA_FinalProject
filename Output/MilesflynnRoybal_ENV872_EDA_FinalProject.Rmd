@@ -91,6 +91,7 @@ hawaiitheme <-
    theme(
     plot.background = element_rect(fill = "white"),
     legend.background = element_rect(fill = "white"),
+    legend.key = element_rect(fill = "white", color = NA),
     legend.title = element_text(color = "black", 
                                 face = "bold",
                                 family = "serif"),
