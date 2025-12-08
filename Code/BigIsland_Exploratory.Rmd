@@ -51,6 +51,7 @@ hawaiitheme <-
    theme(
     plot.background = element_rect(fill = "white"),
     legend.background = element_rect(fill = "white"),
+    legend.key = element_rect(fill = "white", color = NA),
     legend.title = element_text(color = "black", 
                                 face = "bold",
                                 family = "serif"),
@@ -112,27 +113,29 @@ maunaloa_sites_sf <- st_as_sf(MaunaLoa_subset, coords = c("Decimal_Longitude","D
 ```
 
 ```{r Specific Species Mapping Exploration}
-HiloGrass_subset <- 
-  BigIsland_Processed%>%
-  filter(Vernacular_Name == "Hilo grass")
+HighlyInvasive_subset <- 
+  BigIsland_Processed %>%
+  filter(Species_Code %in% c("JUNEFF","SENMAD","HEDGAR","TIBHER",
+                             "RUBELL","MORFAY","PSICAT","SPHCOO","PASTAR"))
 
-sites_sf <- st_as_sf(HiloGrass_subset, coords = c("Decimal_Longitude","Decimal_Latitude"), crs = 4326) 
+sites_sf <- st_as_sf(HighlyInvasive_subset, coords = c("Decimal_Longitude","Decimal_Latitude"), crs = 4326) 
 
 ggplot() +
-  geom_sf(data=big_island, fill="wheat4",
+  geom_sf(data=big_island, fill="lightgreen",
           color="forestgreen") +
   geom_sf(data = sites_sf, 
-          aes(color = HiloGrass_subset$Sampling_Frame), 
+          aes(color = HighlyInvasive_subset$Species_Code), 
           size = 2) +
-   scale_color_manual(
-  values = c(
-    "Mauna Loa" = "orange2",
-    "Nahuku / East Rift" = "lightblue",
-    "Olaa" = "steelblue" ))+
   hawaiitheme+
+   theme(plot.title = element_text(face = "bold",
+                              size = 14,
+                              color = "black",
+                              family = "serif"))+
   theme(axis.text.x = element_text(angle = 45, hjust = 1))+
-  labs(title = "Hilo Grass Records in Sampling Sites",
-       color = "Sampling Sites")
+  labs(title = "Locations of Highly Invasive Species on the Big Island",
+       color = "Invasive Species Code")
+```
+
 
 #could make maps of species common in 2 of 3 sites, a map of one species year by year in one sampling site, etc.
 #difficult to map different species at one site because all have the same transect coordinates given the sampling date. 
