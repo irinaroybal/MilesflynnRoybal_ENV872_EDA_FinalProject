@@ -78,6 +78,68 @@ str(CoverClass_Data)
 ### 3.2 Study Site
 Three regions within Hawai‘i Volcanoes National Park were selected as the Big Island contained the most sampling sites out of all the Hawaiian Islands in the dataset. All invasive plant species were counted within 5 × 20 m plots at each site, allowing for comparison between wet forest and subalpine shrubland habitats. *Figure 1* displays a Landsat mosaic of the approximate location and average elevation of our three study regions. In *Figure 2*, sampling sites are color-coded by region. Mauna Loa, the subalpine shrubland, is depicted in orange. Wet forest habitat types are shown in blue, with Nāhuku/East Rift in light blue and Ola‘a in dark blue.
 
+```{r fig.cap = "Fig. 2: Landsat Mosaic of Big Island of Hawaii, Average Elevation (m)",out.width = "50%"}
+knitr::include_graphics(
+  "~/MilesflynnRoybal_ENV872_EDA_FinalProject.git/Data/Processed/BigIsland.png")
+
+```
+
+```{r Map of Sampling Sites}
+library(sf)
+
+hawaiitheme <- 
+   theme(
+    plot.background = element_rect(fill = "white"),
+    legend.background = element_rect(fill = "white"),
+    legend.title = element_text(color = "black", 
+                                face = "bold",
+                                family = "serif"),
+    legend.text = element_text(color = "black",
+                               family = "serif"),
+    panel.background = element_rect(fill = "cyan3"),
+    panel.grid.major = element_line(color = "lightblue2"),
+    panel.grid.minor = element_line(color = "lightblue2"),
+    plot.title = element_text(face = "bold",
+                              size = 16,
+                              color = "black",
+                              family = "serif"),
+    axis.title.x  = element_text(
+                               face = "italic", 
+                               size = 8, 
+                               color = "black",
+                               family = "serif"),
+    axis.title.y = element_text( 
+                               face = "italic", 
+                               size = 8, 
+                               color = "black",
+                               family = "serif"))
+  
+hawaii.counties <- st_read("Data/Raw/cb_2018_us_county_20m.shp")%>%
+filter(STATEFP == 15 )
+
+big_island <- hawaii.counties %>% 
+  filter(NAME == "Hawaii")
+
+
+sites_sf <- st_as_sf(BigIsland_Processed, coords = c("Decimal_Longitude","Decimal_Latitude"), crs = 4326) 
+
+ggplot() +
+  geom_sf(data=big_island, fill="lightgreen",
+          color="forestgreen") +
+  geom_sf(data = sites_sf, 
+          aes(color = BigIsland_Processed$Sampling_Frame), 
+          size = 2) +
+  scale_color_manual(
+  values = c(
+    "Mauna Loa" = "orange2",
+    "Nahuku / East Rift" = "lightblue",
+    "Olaa" = "steelblue" ))+
+  hawaiitheme+
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))+
+  labs(title = "Sampling Locations on the Big Island",
+       color = "Sampling Sites")
+```
+
 ### 3.3 Data Wrangling
 
 After preliminary raw data exploration, we wrangled and saved the processed dataset as “BigIsland_Processed.csv” to better suit our subsequent analyses. Another dataset, “BigIsland_Clean.csv”, was used to conduct ANOVA and Tukey Post-Hoc tests as these statistical analyses required transect numbers. 
