@@ -68,7 +68,7 @@ knitr::kable(Dataset.Information,
 
 
 ### 3.1 Exploration of Raw Data
-The raw dataset included 33 total variables focus on describing the status of non-native plant richness, frequency, and cover. 
+The raw dataset included 37977 observations across 33 variables, including sampling date, plant community (e.g., wet forest, subalpine shrubland), transect number and type, transect latitude and longitude, datum, species, and life form (which we later refer to as “vegetation type”), among others.
 ```{r Raw Data, echo = FALSE}
 CoverClass_Data <- 
   read.csv("Data/Raw/PACN_EIPS_Cover_Class_Data.csv", stringsAsFactors = FALSE)
@@ -76,11 +76,12 @@ CoverClass_Data <-
 str(CoverClass_Data)
 ```
 ### 3.2 Study Site
-Out of five Hawaiian national parks, we only selected three sites with wet forest and subalpine shrublands habitats that followed the same methodology of counting all non-native plant species found within 5-by-20 meter plots at each site.
+Three regions within Hawai‘i Volcanoes National Park were selected as the Big Island contained the most sampling sites out of all the Hawaiian Islands in the dataset. All invasive plant species were counted within 5 × 20 m plots at each site, allowing for comparison between wet forest and subalpine shrubland habitats. *Figure 1* displays a Landsat mosaic of the approximate location and average elevation of our three study regions. In *Figure 2*, sampling sites are color-coded by region. Mauna Loa, the subalpine shrubland, is depicted in orange. Wet forest habitat types are shown in blue, with Nāhuku/East Rift in light blue and Ola‘a in dark blue.
 
 ### 3.3 Data Wrangling
 
-After preliminary raw data exploration, we wrangled and saved the processed dataset as “BigIsland.Rmd” to better suit our subsequent analyses. 
+After preliminary raw data exploration, we wrangled and saved the processed dataset as “BigIsland_Processed.csv” to better suit our subsequent analyses. Another dataset, “BigIsland_Clean.csv”, was used to conduct ANOVA and Tukey Post-Hoc tests as these statistical analyses required transect numbers. 
+
 
 ## 4 Analysis
 
