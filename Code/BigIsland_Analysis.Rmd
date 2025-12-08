@@ -25,9 +25,9 @@ BigIsland_Processed <- read.csv(
 Invasive_Richness <- ggplot(BigIsland_Processed, aes(x = Sampling_Frame, fill = Sampling_Frame)) +
  geom_bar() +
   labs(
-    title = "Overall Invasive Species Richness at Each Site\non the Big Island of Hawaii",
+    title = "Overall Invasive Species Richness at Each Site\non the Big Island of Hawai'i",
     subtitle = "Wet Forest in Blue | Subalpine Shrubland in Orange",
-    x = "Site Name",
+    x = "Site",
     y = "Species Count"
   ) +
   scale_fill_manual(values = c("Mauna Loa" = "orange2",
@@ -39,27 +39,27 @@ print(Invasive_Richness)
 ```
 ```{r Research Question 1 - Compare Species Richness by Life Form type... sucession???, echo = FALSE}
 
-Invasive_Richness_Site <- ggplot(BigIsland_Processed, aes(x = Sampling_Frame, fill = Life_Form)) +
+Invasive_Richness_Site <- ggplot(BigIsland_Processed, aes(x = Sampling_Frame, fill = Vegetation_Type)) +
  geom_bar(position = "stack") +
   scale_fill_brewer(palette = "Paired") +
   labs(
-    title = "Invasive Species Richness by Life Form\nat Each Site on the Big Island of Hawaii",
-    x = "Site Name",
+    title = "Invasive Species Richness by Vegetation Type at Each Site on the Big Island of Hawai'i",
+    x = "Site",
     y = "Species Count",
-    fill = "Life Form\nCategory",
+    fill = "Vegetation Type",
     )
   
 print(Invasive_Richness_Site)
 
-Invasive_Richness_Type1 <- ggplot(BigIsland_Processed, aes(x = Life_Form, fill = Sampling_Frame)) +
+Invasive_Richness_Type1 <- ggplot(BigIsland_Processed, aes(x = Vegetation_Type, fill = Sampling_Frame)) +
  geom_bar(position = "dodge") +
   scale_fill_brewer(palette = "Paired") +
   labs(
-    title = "Invasive Species Richness by Life Form at Each Site\non the Big Island of Hawaii",
+    title = "Invasive Species Richness by Vegetation Type\nat Each Site on the Big Island of Hawai'i",
     subtitle = "Wet Forest in Blue | Subalpine Shrubland in Orange",
-    x = "Life Form Category",
+    x = "Vegetation Type",
     y = "Species Count",
-    fill = "Site Name",
+    fill = "Site",
     ) +
    scale_fill_manual(values = c("Mauna Loa" = "orange2",
                     "Olaa" = "steelblue",
@@ -86,14 +86,14 @@ print(Invasive_Richness_Type2)
 ```{r Research Question 1 - Compare Species Abundance, echo = FALSE}
 ############### TREE ###############
 Tree_only <- BigIsland_Processed %>%
-  filter(Life_Form == "Tree")
+  filter(Vegetation_Type == "Tree")
 
 Tree_Abundance <- ggplot(Tree_only, aes(x = Species_Code, fill = Species_Code)) +
   geom_bar() +
   facet_wrap(~ Sampling_Frame, ncol = 1) +
   scale_fill_brewer(palette = "Paired") +
   labs(
-    title = "Tree Species Abundance at Each Site on the Big Island of Hawaii",
+    title = "Invasive Tree Species Abundance at Each Site on the\nBig Island of Hawai'i",
     x = "Tree Species Type",
     y = "Species Count"
   )+
@@ -103,14 +103,14 @@ print(Tree_Abundance)
 
 ############### FERN ###############
 Fern_only <- BigIsland_Processed %>%
-  filter(Life_Form == "Fern")
+  filter(Vegetation_Type == "Fern")
 
 Fern_Abundance <- ggplot(Fern_only, aes(x = Species_Code, fill = Species_Code)) +
   geom_bar() +
   facet_wrap(~ Sampling_Frame, ncol = 1) +
   scale_fill_brewer(palette = "Paired") +
   labs(
-    title = "Fern Species Abundance at Each Site on the Big Island of Hawaii",
+    title = "Invasive Fern Species Abundance at Each Site on the\nBig Island of Hawai'i",
     x = "Fern Species Type",
     y = "Species Count"
   ) +
@@ -118,48 +118,50 @@ Fern_Abundance <- ggplot(Fern_only, aes(x = Species_Code, fill = Species_Code)) 
 
 print(Fern_Abundance)
 
-############### GRASS ############### Note: Too many species... looks messy
+############### GRASS ###############
 Grass_only <- BigIsland_Processed %>%
-  filter(Life_Form == "Grass")
+  filter(Vegetation_Type == "Grass")
 
 Grass_Abundance <- ggplot(Grass_only, aes(x = Species_Code, fill = Species_Code)) +
   geom_bar() +
   facet_wrap(~ Sampling_Frame, ncol = 1) +
   labs(
-    title = "Grass Species Abundance at Each Site on the Big Island of Hawaii",
+    title = "Invasive Grass Species Abundance at Each Site on the\nBig Island of Hawai'i",
     x = "Grass Species Type",
     y = "Species Count"
   ) +
-  theme(legend.position = "none")
+  theme(legend.position = "none",
+        axis.text.x = element_text(angle = 270))
 
 print(Grass_Abundance)
 
-############### Herb ############### Note: too many species... looks messy
+############### Herb ###############
 Herb_only <- BigIsland_Processed %>%
-  filter(Life_Form == "Herb")
+  filter(Vegetation_Type == "Herb")
 
 Herb_Abundance <- ggplot(Herb_only, aes(x = Species_Code, fill = Species_Code)) +
   geom_bar() +
   facet_wrap(~ Sampling_Frame, ncol = 1) +
   labs(
-    title = "Herb Species Abundance at Each Site on the Big Island of Hawaii",
+    title = "Invasive Herb Species Abundance at Each Site on the\nBig Island of Hawai'i",
     x = "Herb Species Type",
     y = "Species Count"
   ) +
-  theme(legend.position = "none")
+  theme(legend.position = "none",
+        axis.text.x = element_text(angle = 270))
 
 print(Herb_Abundance)
 
 ############### SEDGE ###############
 Sedge_only <- BigIsland_Processed %>%
-  filter(Life_Form == "Sedge")
+  filter(Vegetation_Type == "Sedge")
 
 Sedge_Abundance <- ggplot(Sedge_only, aes(x = Species_Code, fill = Species_Code)) +
   geom_bar() +
   facet_wrap(~ Sampling_Frame, ncol = 1) +
   scale_fill_brewer(palette = "Paired") +
   labs(
-    title = "Sedge Species Abundance at Each Site on the Big Island of Hawaii",
+    title = "Invasive Sedge Species Abundance at Each Site on the\nBig Island of Hawai'i",
     x = "Sedge Species Type",
     y = "Species Count"
   ) +
@@ -167,16 +169,33 @@ Sedge_Abundance <- ggplot(Sedge_only, aes(x = Species_Code, fill = Species_Code)
 
 print(Sedge_Abundance)
 
+############### RUSH ###############
+Rush_only <- BigIsland_Processed %>%
+  filter(Vegetation_Type == "Rush")
+
+Rush_Abundance <- ggplot(Rush_only, aes(x = Species_Code, fill = Species_Code)) +
+  geom_bar() +
+  facet_wrap(~ Sampling_Frame, ncol = 1) +
+  scale_fill_brewer(palette = "Paired") +
+  labs(
+    title = "Invasive Rush Species Abundance at Each Site on the\nBig Island of Hawai'i",
+    x = "Rush Species Type",
+    y = "Species Count"
+  ) +
+  theme(legend.position = "none")
+
+print(Rush_Abundance)
+
 ############### Shrub ############### Note: Mauna Loa looks empty in the bar graph, but if you look at sub-dataset "Shrub_only" theres ONE specie listed under Mauna Loa
 Shrub_only <- BigIsland_Processed %>%
-  filter(Life_Form == "Shrub")
+  filter(Vegetation_Type == "Shrub")
 
 Shrub_Abundance <- ggplot(Shrub_only, aes(x = Species_Code, fill = Species_Code)) +
   geom_bar() +
   facet_wrap(~ Sampling_Frame, ncol = 1) +
   scale_fill_brewer(palette = "Paired") +
   labs(
-    title = "Shrub Species Abundance at Each Site on the Big Island of Hawaii",
+    title = "Invasive Shrub Species Abundance at Each Site on the\nBig Island of Hawai'i",
     x = "Shrub Species Type",
     y = "Species Count"
   ) +
@@ -186,14 +205,14 @@ print(Shrub_Abundance)
 
 ############### TREE FERN ###############
 Tree.Fern_only <- BigIsland_Processed %>%
-  filter(Life_Form == "Tree Fern")
+  filter(Vegetation_Type == "Tree Fern")
 
 Tree.Fern_Abundance <- ggplot(Tree.Fern_only, aes(x = Species_Code, fill = Species_Code)) +
   geom_bar() +
   facet_wrap(~ Sampling_Frame, ncol = 1) +
   scale_fill_brewer(palette = "Paired") +
   labs(
-    title = "Tree Fern Species Abundance at Each Site on the Big Island of Hawaii",
+    title = "Invasive Tree Fern Species Abundance at Each Site on the\nBig Island of Hawai'i",
     x = "Tree Fern Species Type",
     y = "Species Count"
   ) +
@@ -203,14 +222,14 @@ print(Tree.Fern_Abundance)
 
 ############### VINE ###############
 Vine_only <- BigIsland_Processed %>%
-  filter(Life_Form == "Vine")
+  filter(Vegetation_Type == "Vine")
 
 Vine_Abundance <- ggplot(Vine_only, aes(x = Species_Code, fill = Species_Code)) +
   geom_bar() +
   facet_wrap(~ Sampling_Frame, ncol = 1) +
   scale_fill_brewer(palette = "Paired") +
   labs(
-    title = "Vine Species Abundance at Each Site on the Big Island of Hawaii",
+    title = "Invasive Vine Species Abundance at Each Site on the\nBig Island of Hawai'i",
     x = "Vine Species Type",
     y = "Species Count"
   ) +
@@ -276,10 +295,10 @@ invasion.time.plot <- ggplot (Richness_by_Year, aes(x = Year, y = TotalSpecies, 
   facet_wrap( ~ Sampling_Frame, ncol = 1) +
   scale_x_continuous(breaks = seq(2010, 2023, by = 2))+
   labs(
-    title = "2010 to 2023 Detection of Invasive Species for Each Site\non the Big Island of Hawaii",
+    title = "2010 to 2023 Detection of Invasive Species for Each Site\non the Big Island of Hawai'i",
     x = "Year",
-    y = "Total Invasive Species Count",
-    color = "Site Name"
+    y = "Total Species Count",
+    color = "Site"
   ) +
   scale_color_manual(values = c("Mauna Loa" = "orange2",
                     "Olaa" = "steelblue",

@@ -4,12 +4,12 @@ author: "Environmental Data Analytics | Elizabeth Miles-Flynn & Irina Roybal"
 subtitle: "Mauna Loa, Ola'a, and Nahuku/East Rift"
 date: "December 10, 2025"
 output:
-  html_document:
+  bookdown::html_document2:
     toc: true
     toc_depth: 2
     toc_float: true
-    lof: true
-    lot: true
+lof: true
+lot: true
     theme: cerulean
     highlight: tango
 ---
