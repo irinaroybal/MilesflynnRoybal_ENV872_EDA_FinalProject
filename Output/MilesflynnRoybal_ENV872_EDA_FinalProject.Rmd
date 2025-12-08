@@ -106,7 +106,7 @@ str(CoverClass_Data)
 Three regions within Hawai‘i Volcanoes National Park were selected as the Big Island contained the most sampling sites out of all the Hawaiian Islands in the dataset. All invasive plant species were counted within 5 × 20 m plots at each site, allowing for comparison between wet forest and subalpine shrubland habitats. *Figure 1* displays a Landsat mosaic of the approximate location and average elevation of our three study regions. In *Figure 2*, sampling sites are color-coded by region. Mauna Loa, the subalpine shrubland, is depicted in orange. Wet forest habitat types are shown in blue, with Nāhuku/East Rift in light blue and Ola‘a in dark blue.
 
 ```{r Image, fig.cap="Figure 3.2: Landsat Mosaic of Big Island of Hawaii, Average Elevation (m)", out.width = "50%", echo = FALSE, messages = FALSE}
-knitr::include_graphics("Output/BigIsland.png")
+knitr::include_graphics("Data/Processed/BigIsland.png")
 
 ```
 
@@ -188,7 +188,9 @@ print(Invasive_Richness_Type1)
 Regional Structural Diversity: An ANOVA test analyzing the significance of structural differences between study regions found that Nahuku / East Rift, Ola’a, and Mauna Loa all had significant differences in structural diversity. By aggregating the number of vegetation types found at each transect/sampling point, we are able to determine the structural diversity of a given point and translate regional patterns into comparable data that is then analyzed for statistical significance (i.e. a site with tree + shrub + fern + grass receives a diversity score of 4, whereas a site with only grass + shrub receives diversity score of 2). A Tukey Post-Hoc test revealed that Ola’a has a greater structural diversity than Mauna Loa with a mean difference of 4.527. Nahuku-East Rift is also more structurally diverse than Mauna Loa with a mean difference of 3.081. Ola’a also has a higher structural diversity than Nahuku / East Rift with a mean difference of 1.446, though this difference is comparably less pronounced. This suggests that overall, Ola’a has the greatest structural diversity, followed by Nahuku / East Rift, and Mauna Loa with the lowest structural diversity. 
 ### 4.1 Diversity of invasive species across habitat type
 ```{r include = FALSE}
-############### TREE ###############
+# nine plots {.tabset}
+
+##TREE
 Tree_only <- BigIsland_Processed %>%
   filter(Vegetation_Type == "Tree")
 
@@ -205,7 +207,7 @@ Tree_Abundance <- ggplot(Tree_only, aes(x = Species_Code, fill = Species_Code)) 
 
 print(Tree_Abundance)
 
-############### FERN ###############
+##FERN
 Fern_only <- BigIsland_Processed %>%
   filter(Vegetation_Type == "Fern")
 
@@ -222,7 +224,7 @@ Fern_Abundance <- ggplot(Fern_only, aes(x = Species_Code, fill = Species_Code)) 
 
 print(Fern_Abundance)
 
-############### GRASS ###############
+##GRASS
 Grass_only <- BigIsland_Processed %>%
   filter(Vegetation_Type == "Grass")
 
@@ -239,7 +241,7 @@ Grass_Abundance <- ggplot(Grass_only, aes(x = Species_Code, fill = Species_Code)
 
 print(Grass_Abundance)
 
-############### Herb ###############
+##HERB
 Herb_only <- BigIsland_Processed %>%
   filter(Vegetation_Type == "Herb")
 
@@ -256,7 +258,7 @@ Herb_Abundance <- ggplot(Herb_only, aes(x = Species_Code, fill = Species_Code)) 
 
 print(Herb_Abundance)
 
-############### SEDGE ###############
+##SEDGE
 Sedge_only <- BigIsland_Processed %>%
   filter(Vegetation_Type == "Sedge")
 
@@ -273,7 +275,7 @@ Sedge_Abundance <- ggplot(Sedge_only, aes(x = Species_Code, fill = Species_Code)
 
 print(Sedge_Abundance)
 
-############### RUSH ###############
+##RUSH
 Rush_only <- BigIsland_Processed %>%
   filter(Vegetation_Type == "Rush")
 
@@ -290,7 +292,7 @@ Rush_Abundance <- ggplot(Rush_only, aes(x = Species_Code, fill = Species_Code)) 
 
 print(Rush_Abundance)
 
-############### Shrub ############### Note: Mauna Loa looks empty in the bar graph, but if you look at sub-dataset "Shrub_only" theres ONE specie listed under Mauna Loa
+##Shrub
 Shrub_only <- BigIsland_Processed %>%
   filter(Vegetation_Type == "Shrub")
 
@@ -307,7 +309,7 @@ Shrub_Abundance <- ggplot(Shrub_only, aes(x = Species_Code, fill = Species_Code)
 
 print(Shrub_Abundance)
 
-############### TREE FERN ###############
+##TREE FERN
 Tree.Fern_only <- BigIsland_Processed %>%
   filter(Vegetation_Type == "Tree Fern")
 
@@ -324,7 +326,7 @@ Tree.Fern_Abundance <- ggplot(Tree.Fern_only, aes(x = Species_Code, fill = Speci
 
 print(Tree.Fern_Abundance)
 
-############### VINE ###############
+##VINE
 Vine_only <- BigIsland_Processed %>%
   filter(Vegetation_Type == "Vine")
 
@@ -355,9 +357,12 @@ plot(Herb_Abundance)
 plot(Vine_Abundance)
 plot(Shrub_Abundance)
 
-par(mfrow = c(1, 1)) # reset
+par(mfrow = c(1, 1))
 
 
+
+
+```
 ### 4.2 Time series of invasive plants
 
 ## 5 Summary and Conclusions
