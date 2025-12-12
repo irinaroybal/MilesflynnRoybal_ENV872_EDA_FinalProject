@@ -437,7 +437,7 @@ ggplot() +
        color = "Invasive Species Code")
 ```
 
-## Diversity of invasive species across habitat type {.tabset}
+## Diversity of Invasive Species Across Habitat Type {.tabset}
 
 ### FERN
 
