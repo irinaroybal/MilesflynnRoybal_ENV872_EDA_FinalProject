@@ -304,6 +304,10 @@ invasion.time.plot <- ggplot (Richness_by_Year, aes(x = Year, y = TotalSpecies, 
                     "Olaa" = "steelblue",
                     "Nahuku / East Rift" = "lightblue"))
 
-print(invasion.time.plot)
+#find linear model slope of each sample region for previous plot
+model <- Richness_by_Year %>%
+  group_by(Sampling_Frame) %>%
+  do(model = lm(TotalSpecies ~ Year, data = .)) %>%
+  summarise(Sampling_Frame, slope = coef(model)[2])
 ```
 

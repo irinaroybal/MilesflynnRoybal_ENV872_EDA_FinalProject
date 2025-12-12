@@ -1,0 +1,495 @@
+---
+title: "Evaluation of Invasive Plant Species Composition and Structural Diversity on the Big Island of Hawai'i"
+author: "Environmental Data Analytics | Elizabeth Miles-Flynn & Irina Roybal"
+subtitle: "Mauna Loa, Ola'a, and Nahuku/East Rift"
+date: "December 12, 2025"
+output: 
+  bookdown::html_document2:
+    toc: true
+    toc_depth: 2
+    toc_float: true
+    lof: true
+    theme: cerulean
+    highlight: tango
+---
+
+```{r setup, include=FALSE}
+##Note: These weren't learned in class yet helpful to create list of figures in html - used online sources. 
+#install.packages("xfun")
+#install.packages("bookdown")
+
+#Setup
+library(bookdown)
+library(tidyverse)
+library(lubridate)
+library(here)
+library(knitr)
+library(sf)
+library(trend)
+library(zoo)
+
+#Check Working Directory
+getwd()
+here()
+
+#Set Theme
+hawaiitheme <- 
+   theme(
+    plot.background = element_rect(fill = "white"),
+    legend.background = element_rect(fill = "white"),
+    legend.key = element_rect(fill = "white", color = NA),
+    legend.title = element_text(color = "black", 
+                                face = "bold",
+                                family = "serif"),
+    legend.text = element_text(color = "black",
+                               family = "serif"),
+    panel.background = element_rect(fill = "cyan3"),
+    panel.grid.major = element_line(color = "lightblue2"),
+    panel.grid.minor = element_line(color = "lightblue2"),
+    plot.title = element_text(face = "bold",
+                              size = 16,
+                              color = "black",
+                              family = "serif"),
+    axis.title.x  = element_text(
+                               face = "italic", 
+                               size = 8, 
+                               color = "black",
+                               family = "serif"),
+    axis.title.y = element_text( 
+                               face = "italic", 
+                               size = 8, 
+                               color = "black",
+                               family = "serif"))
+```
+
+## Git Repository
+
+<https://github.com/irinaroybal/MilesflynnRoybal_ENV872_EDA_FinalProject.git>
+
+## List of Figures
+
+\listoffigures
+
+# Rationale and Research Questions
+
+The purpose of this study is to analyze the spatial distribution of invasive species across three study sites on the Big Island of Hawai‘i. Prior to Polynesian arrival in the remote Pacific, new invasive species established naturally at an estimated rate of one species every 50,000 years. After Polynesian settlement, this rate increased to roughly three to four species every hundred years (Young 2016). Following European contact, the introduction rate accelerated dramatically to approximately twenty invasive species per year in Hawai‘i (Ewell 1999). While non-native species include any organisms introduced outside their natural range, only a subset of them become invasive. Invasive species are defined as non-native organisms that spread rapidly and/or cause ecological, economic, or cultural harm. These invasive species pose a substantial threat to Hawai‘i’s unique native biota. Of the roughly 10,000 native species found across the Hawaiian Islands, nearly 90% are endemic—occurring nowhere else on Earth (Cordell 2021). Our goal is to evaluate the invasive species on the Big Island across three study sites over the past thirteen years to inform best management practices to protect endemic species of the Hawaiian Islands. Our dataset focuses on three sites on the Big Island: Mauna Loa, Ola’a, and Nahuku/East Rift. Mauna Loa is classified as a subalpine shrubland, and Ola’a and Nahuku/East Rift are considered wet forest habitats. Our dataset ranges from 2010 to 2023 and contains coordinates for each survey site where a transect was used to count species-level observations and counts of repeated occurrences. **Through our analysis, we aim to answer the following research questions:**
+
+1.  **Does invasive species' richness change across the three sample regions?**
+
+2.  **Does invasive species' structural diversity change across the three sample regions?**
+
+3.  **How does the frequency and distribution of invasive species change over time for each site?**
+
+We hypothesize that there will be a significant difference in species richness and structural diversity between habitats and vegetation types. Previous research in Hawai’i Volcanoes National Park shows that there is a sharp transition between wet forests and subalpine shrubland at 2000 millimeter mean annual precipitation. A Hawaiian treeline ecotones study attributed the phenomenon to distinct changes in soil moisture (Ainsworth and Drake 2024). We predict that both wet forest types will have a more rapid increase in invasive species introduction over time than Mauna Loa. This expectation is based on reduced physical barriers (e.g., less steep terrain, increased connectivity with other habitat types), higher resource availability, more human/animal activity to disperse propagules, and a wider range of ecological niches for invasive species to occupy.
+
+# Dataset Information
+
+Raw data was derived from the United States Government's open data site starting from October 4th, 2010 to September 7th, 2023. This dataset is part of The Pacific Island Inventory and Monitoring Network (PACN) Established Invasive Plant Species (EIPS) Monitoring Protocol. More information on the sources used can be found in the table below: 
+
+```{r dataset_information, fig.cap="Dataset Information on PACN EIPS Cover Class Data", echo=FALSE, message=FALSE, warning=FALSE}
+
+#Create a dataframe with dataset information
+Dataset.Information <- data.frame (
+  Detail = c("Name", "Publisher", "Retrieved From", "Variables Used", "Date Range"),
+  Description = c("Pacific Island Network Established Invasive Plant Species Monitoring Dataset 2010-2022", "National Park Service", "https://catalog.data.gov/dataset/pacific-island-network-established-invasive-plant-species-monitoring-dataset-2010-2022", "Plant Community, Sampling Frame, Decimal Latitude, Decimal Longitude, Date, Species Code, Scientific Name, Vernacular Name, Vegetation Type", "October 4, 2010 to September 7, 2023")
+)
+
+#Create a table 
+knitr::kable(Dataset.Information,
+             col.names = c("Detail", "Description"),
+             digits = 2)
+```
+
+# Exploratory Analysis
+
+## Exploration of Raw Data
+
+The raw dataset included 37977 observations across 33 variables, including sampling date, plant community (e.g., wet forest, subalpine shrubland), transect number and type, transect latitude and longitude, datum, species, and life form (which we later refer to as “vegetation type”), among others. There were also several NA values which were subsequently omitted from our processed dataset.
+
+```{r RawData, echo=FALSE, message=FALSE, warning=FALSE}
+CoverClass_Data <- read.csv(
+  here::here("Data", "Raw", "PACN_EIPS_Cover_Class_Data.csv"), stringsAsFactors = FALSE)
+
+str(CoverClass_Data)
+```
+
+## Study Site
+
+Three regions within Hawai‘i Volcanoes National Park were selected as the Big Island contained the most sampling sites out of all the Hawaiian Islands in the dataset. All invasive plant species were counted within 5 × 20 m plots at each site, allowing for comparison between wet forest and subalpine shrubland habitats. Figure 3.2.1 displays a Landsat mosaic of the approximate location and average elevation of our three study regions. In Figure 3.2.2, sampling sites are color-coded by region. Studies characterize wet forests with greater wet canopy evaporation, annual mean precipitation and temperature. Subalpine shrublands are found at higher elevations with cooler temperatures and experience greater soil evaporation (Ainsworth and Drake 2024). Mauna Loa, the subalpine shrubland, is depicted in orange. Wet forest habitat types are shown in blue, with Nāhuku/East Rift in light blue and Ola‘a in dark blue.
+
+```{r Image, fig.cap="Landsat Mosaic of Big Island of Hawaii, Average Elevation (m)", out.width = "50%", echo=FALSE, message=FALSE, warning=FALSE}
+
+knitr::include_graphics(
+  here::here("Data", "Processed", "BigIsland.png")
+)
+
+```
+
+```{r MapofSamplingSites, fig.cap="Map showing the sampling sites are color-coded by region", echo=FALSE, message=FALSE, warning=FALSE}
+
+BigIsland_Processed <- 
+  read.csv("Data/Processed/BigIsland_Processed.csv", stringsAsFactors = FALSE)
+  
+hawaii.counties <- st_read("Data/Raw/cb_2018_us_county_20m.shp")%>%
+filter(STATEFP == 15 )
+
+big_island <- hawaii.counties %>% 
+  filter(NAME == "Hawaii")
+
+sites_sf <- st_as_sf(BigIsland_Processed, coords = c("Decimal_Longitude","Decimal_Latitude"), crs = 4326) 
+
+ggplot() +
+  geom_sf(data=big_island, fill="lightgreen",
+          color="forestgreen") +
+  geom_sf(data = sites_sf, 
+          aes(color = BigIsland_Processed$Sampling_Frame), 
+          size = 2) +
+  scale_color_manual(
+  values = c(
+    "Mauna Loa" = "orange2",
+    "Nahuku / East Rift" = "lightblue",
+    "Olaa" = "steelblue" ))+
+  hawaiitheme+
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))+
+  labs(title = "Sampling Locations on the Big Island",
+       color = "Sampling Sites")
+```
+
+## Data Wrangling
+
+Spatially, the raw dataset ranged from 19.4 to 22.0 degrees latitude and -155.0 to -160.0 degrees longitude and was collected in WGS 1984 (4326). To map our desired extent, we filtered the state of Hawai’i by counties to extract just the Big Island, the result extent was between 19.0 to 20.2 degrees latitude and -154.8 to -156.0 degrees longitude. 
+
+After preliminary raw data exploration, we filtered for the three sampling sites (Mauna Loa, Nahuku/East Rift, and Ola’a) on the Big Island of Hawai’i.  We selected the following variables that better suit our analyses and renamed each column by removing “custom_” prefix: Plant Community, Sampling Frame, Decimal Latitude, Decimal Longitude, Date, Species Code, Scientific Name, Vernacular Name, and Vegetation Type. The wrangled, processed dataset was saved as “BigIsland_Processed.csv”. Another dataset, “BigIsland_Clean.csv”, was used to conduct ANOVA and Tukey Post-Hoc tests as these statistical analyses required transect numbers. 
+
+
+# Analysis
+
+```{r ResearchQ1, fig.cap="Overall Invasive Species Richness at Each Site on the Big Island of Hawai'i", echo=FALSE, message=FALSE, warning=FALSE}
+
+#Note: In the title names I added "\n" to create new line breaks to prevent text from disappearing from the screen, so they are NOT typos!
+Invasive_Richness <- ggplot(BigIsland_Processed, aes(x = Sampling_Frame, fill = Sampling_Frame)) +
+ geom_bar() +
+  labs(
+    title = "Overall Invasive Species Richness at Each Site\non the Big Island of Hawai'i",
+    subtitle = "Wet Forest in Blue | Subalpine Shrubland in Orange",
+    x = "Sample Region",
+    y = "Species Count"
+  ) +
+  scale_fill_manual(values = c("Mauna Loa" = "orange2",
+                    "Olaa" = "steelblue",
+                    "Nahuku / East Rift" = "lightblue"),
+                    guide = "none")
+  
+print(Invasive_Richness)
+```
+
+**Site Region Richness:**Our results support our hypothesis that Mauna Loa had the lowest overall invasive species richness compared to other regions. Higher elevation environments such as Mauna Loa tend to experience less invasive species; likely due to harsher environmental conditions, short growing seasons, and steep terrain that limit their persistence. Notably, Ola’a has the lowest average elevation and the greatest invasive species richness. Lower elevations tend to have milder climates that support favorable conditions for diverse species growth and proliferation (Ainsworth and Drake 2024).  
+
+Our ANOVA test revealed that there was a significant difference in overall invasive species richness between Ola’a and Mauna Loa (p-value of 0.028). There was no meaningful significance in invasive species richness between Nahuku / East Rift and Mauna Loa (p-value of 0.161) and Ola’a and Nahuku / East Rift (p-value of 0.803). We chose to define richness as the number of distinct species types at a given transect by using the function “n_distinct”, negating repeated counts of species occurrence. In doing so, we were able to assign richness scores to each transect and averaged across study regions to determine their respective invasive species richness. After running a Tukey Post-Hoc Test, we found that Ola’a has an overall higher invasive species richness relative to Mauna Loa. 
+
+
+```{r ResearchQ2, fig.cap="Invasive Species Richness by Vegetation Type at Each Site on the Big Island of Hawai'i", echo=FALSE, message=FALSE, warning=FALSE}
+
+Invasive_Richness_Type1 <- ggplot(BigIsland_Processed, aes(x = Vegetation_Type, fill = Sampling_Frame)) +
+ geom_bar(position = "dodge") +
+  scale_fill_brewer(palette = "Paired") +
+  labs(
+    title = "Invasive Species Richness by Vegetation Type\nat Each Site on the Big Island of Hawai'i",
+    subtitle = "Wet Forest in Blue | Subalpine Shrubland in Orange",
+    x = "Vegetation Type",
+    y = "Species Count"
+    ) +
+   scale_fill_manual(values = c("Mauna Loa" = "orange2",
+                    "Olaa" = "steelblue",
+                    "Nahuku / East Rift" = "lightblue"))
+  
+print(Invasive_Richness_Type1)
+```
+
+**Regional Structural Diversity:** We evaluated the differences in vegetation types for non-native species richness for each site. Grass and herbaceous species have the largest species count in all sites. Figures REST break down the species count by each vegetation type with invasive species code abbreviations commonly used at the Hawai’i Volcanoes National Park. 
+
+An ANOVA test analyzing the significance of structural differences between study regions found that Nahuku / East Rift, Ola’a, and Mauna Loa all had significant differences in structural diversity. By aggregating the number of vegetation types found at each transect/sampling point, we are able to determine the structural diversity of a given point and translate regional patterns into comparable data that is then analyzed for statistical significance (i.e. a site with tree + shrub + fern + grass receives a diversity score of 4, whereas a site with only grass + shrub receives diversity score of 2). A Tukey Post-Hoc test revealed that Ola’a has a greater structural diversity than Mauna Loa with a mean difference of 4.527. Nahuku-East Rift is also more structurally diverse than Mauna Loa with a mean difference of 3.081. Ola’a also has a higher structural diversity than Nahuku / East Rift with a mean difference of 1.446, though this difference is comparably less pronounced. This suggests that overall, Ola’a has the greatest structural diversity, followed by Nahuku / East Rift, and Mauna Loa with the lowest structural diversity. 
+
+
+## Diversity of invasive species across habitat type {.tabset}
+
+### FERN
+
+```{r fern, fig.cap="Invasive Fern Species Abundance at Each Site on the Big Island of Hawai'i", echo=FALSE, message=FALSE, warning=FALSE}
+
+Fern_only <- BigIsland_Processed %>%
+  filter(Vegetation_Type == "Fern")
+
+Fern_Abundance <- ggplot(Fern_only, aes(x = Species_Code, fill = Species_Code)) +
+  geom_bar() +
+  facet_wrap(~ Sampling_Frame, ncol = 1) +
+  scale_fill_brewer(palette = "Paired") +
+  labs(
+    title = "Invasive Fern Species Abundance at Each Site on the\nBig Island of Hawai'i",
+    x = "Fern Species Type",
+    y = "Species Count"
+  ) +
+  theme(legend.position = "none")
+
+Fern_Abundance
+```
+
+### GRASS
+
+```{r grass, fig.cap="Invasive Grass Species Abundance at Each Site on the\nBig Island of Hawai'i", echo = FALSE, message = FALSE, warning = FALSE}
+
+Grass_only <- BigIsland_Processed %>%
+  filter(Vegetation_Type == "Grass")
+
+Grass_Abundance <- ggplot(Grass_only, aes(x = Species_Code, fill = Species_Code)) +
+  geom_bar() +
+  facet_wrap(~ Sampling_Frame, ncol = 1) +
+  labs(
+    title = "Invasive Grass Species Abundance at Each Site on the\nBig Island of Hawai'i",
+    x = "Grass Species Type",
+    y = "Species Count"
+  ) +
+  theme(legend.position = "none",
+        axis.text.x = element_text(angle = 270))
+
+Grass_Abundance
+```
+
+### HERB
+
+```{r herb, fig.cap="Invasive Herb Species Abundance at Each Site on the Big Island of Hawai'i", echo=FALSE, message=FALSE, warning=FALSE}
+
+Herb_only <- BigIsland_Processed %>%
+  filter(Vegetation_Type == "Herb")
+
+Herb_Abundance <- ggplot(Herb_only, aes(x = Species_Code, fill = Species_Code)) +
+  geom_bar() +
+  facet_wrap(~ Sampling_Frame, ncol = 1) +
+  labs(
+    title = "Invasive Herb Species Abundance at Each Site on the\nBig Island of Hawai'i",
+    x = "Herb Species Type",
+    y = "Species Count"
+  ) +
+  theme(legend.position = "none",
+        axis.text.x = element_text(angle = 270))
+
+Herb_Abundance
+```
+
+### RUSH
+
+```{r rush, fig.cap="Invasive Rush Species Abundance at Each Site on the Big Island of Hawai'i", echo=FALSE, message=FALSE, warning=FALSE}
+
+Rush_only <- BigIsland_Processed %>%
+  filter(Vegetation_Type == "Rush")
+
+Rush_Abundance <- ggplot(Rush_only, aes(x = Species_Code, fill = Species_Code)) +
+  geom_bar() +
+  facet_wrap(~ Sampling_Frame, ncol = 1) +
+  scale_fill_brewer(palette = "Paired") +
+  labs(
+    title = "Invasive Rush Species Abundance at Each Site on the\nBig Island of Hawai'i",
+    x = "Rush Species Type",
+    y = "Species Count"
+  ) +
+  theme(legend.position = "none")
+
+Rush_Abundance
+```
+
+### SEDGE
+
+```{r sedge, fig.cap="Invasive Sedge Species Abundance at Each Site on the Big Island of Hawai'i", echo=FALSE, message=FALSE, warning=FALSE}
+
+Sedge_only <- BigIsland_Processed %>%
+  filter(Vegetation_Type == "Sedge")
+
+Sedge_Abundance <- ggplot(Sedge_only, aes(x = Species_Code, fill = Species_Code)) +
+  geom_bar() +
+  facet_wrap(~ Sampling_Frame, ncol = 1) +
+  scale_fill_brewer(palette = "Paired") +
+  labs(
+    title = "Invasive Sedge Species Abundance at Each Site on the\nBig Island of Hawai'i",
+    x = "Sedge Species Type",
+    y = "Species Count"
+  ) +
+  theme(legend.position = "none")
+
+Sedge_Abundance
+```
+
+### SHRUB
+
+```{r shrub, fig.cap="Invasive Shrub Species Abundance at Each Site on the Big Island of Hawai'i", echo=FALSE, message=FALSE, warning=FALSE}
+
+Shrub_only <- BigIsland_Processed %>%
+  filter(Vegetation_Type == "Shrub")
+
+Shrub_Abundance <- ggplot(Shrub_only, aes(x = Species_Code, fill = Species_Code)) +
+  geom_bar() +
+  facet_wrap(~ Sampling_Frame, ncol = 1) +
+  scale_fill_brewer(palette = "Paired") +
+  labs(
+    title = "Invasive Shrub Species Abundance at Each Site on the\nBig Island of Hawai'i",
+    x = "Shrub Species Type",
+    y = "Species Count"
+  ) +
+  theme(legend.position = "none")
+
+Shrub_Abundance
+```
+
+### Tree
+
+```{r tree, fig.cap="Invasive Tree Species Abundance at Each Site on the Big Island of Hawai'i", echo=FALSE, message=FALSE, warning=FALSE}
+
+Tree_only <- BigIsland_Processed %>%
+  filter(Vegetation_Type == "Tree")
+
+Tree_Abundance <- ggplot(Tree_only, aes(x = Species_Code, fill = Species_Code)) +
+  geom_bar() +
+  facet_wrap(~ Sampling_Frame, ncol = 1) +
+  scale_fill_brewer(palette = "Paired") +
+  labs(
+    title = "Invasive Tree Species Abundance at Each Site on the\nBig Island of Hawai'i",
+    x = "Tree Species Type",
+    y = "Species Count"
+  )+
+  theme(legend.position = "none")
+
+Tree_Abundance
+```
+
+### TREE FERN
+
+```{r treefern, fig.cap="Invasive Tree Fern Species Abundance at Each Site on the Big Island of Hawai'i", echo=FALSE, message=FALSE, warning=FALSE}
+
+Tree.Fern_only <- BigIsland_Processed %>%
+  filter(Vegetation_Type == "Tree Fern")
+
+Tree.Fern_Abundance <- ggplot(Tree.Fern_only, aes(x = Species_Code, fill = Species_Code)) +
+  geom_bar() +
+  facet_wrap(~ Sampling_Frame, ncol = 1) +
+  scale_fill_brewer(palette = "Paired") +
+  labs(
+    title = "Invasive Tree Fern Species Abundance at Each Site on the\nBig Island of Hawai'i",
+    x = "Tree Fern Species Type",
+    y = "Species Count"
+  ) +
+  theme(legend.position = "none")
+
+Tree.Fern_Abundance
+```
+
+### VINE
+
+```{r vine, fig.cap="Invasive Vine Species Abundance at Each Site on the\nBig Island of Hawai'i", echo=FALSE, message=FALSE, warning=FALSE}
+
+Vine_only <- BigIsland_Processed %>%
+  filter(Vegetation_Type == "Vine")
+
+Vine_Abundance <- ggplot(Vine_only, aes(x = Species_Code, fill = Species_Code)) +
+  geom_bar() +
+  facet_wrap(~ Sampling_Frame, ncol = 1) +
+  scale_fill_brewer(palette = "Paired") +
+  labs(
+    title = "Invasive Vine Species Abundance at Each Site on the\nBig Island of Hawai'i",
+    x = "Vine Species Type",
+    y = "Species Count"
+  ) +
+  theme(legend.position = "none")
+
+Vine_Abundance
+```
+
+##Specific Invasive Species Map Exploration
+
+```{r SpecificSpeciesMappingExploration, fig.cap="Locations of Highly Invasive Species on the Big Island", echo=FALSE, message=FALSE, warning=FALSE}
+
+HighlyInvasive_subset <- 
+  BigIsland_Processed %>%
+  filter(Species_Code %in% c("JUNEFF","SENMAD","HEDGAR","TIBHER",
+                             "RUBELL","MORFAY","PSICAT","SPHCOO","PASTAR"))
+
+sites_sf <- st_as_sf(HighlyInvasive_subset, coords = c("Decimal_Longitude","Decimal_Latitude"), crs = 4326) 
+
+ggplot() +
+  geom_sf(data=big_island, fill="lightgreen",
+          color="forestgreen") +
+  geom_sf(data = sites_sf, 
+          aes(color = HighlyInvasive_subset$Species_Code), 
+          size = 2) +
+  hawaiitheme+
+   theme(plot.title = element_text(face = "bold",
+                              size = 14,
+                              color = "black",
+                              family = "serif"))+
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))+
+  labs(title = "Locations of Highly Invasive Species on the Big Island",
+       color = "Invasive Species Code")
+```
+
+## Time series of invasive plants
+
+```{r ResearchQ3, fig.cap="2010 to 2023 Detection of Invasive Species for Each Site on the Big Island of Hawai'i", echo=FALSE, message=FALSE, warning=FALSE}
+
+Richness_by_Year <- BigIsland_Processed %>%
+  mutate(Year = year(Date)) %>%
+  group_by(Year, Sampling_Frame) %>%
+  summarise(TotalSpecies = n_distinct(Species_Code), .groups = "drop")
+
+#add linear interpolation
+Richness_by_Year <- Richness_by_Year %>%
+  arrange(Year) %>%
+  group_by(Sampling_Frame) %>%
+  mutate(TotalSpecies = zoo::na.approx(TotalSpecies, x = Year, na.rm = FALSE)) %>%
+  ungroup()
+
+invasion.time.plot <- ggplot (Richness_by_Year, aes(x = Year, y = TotalSpecies, color = Sampling_Frame)) +
+  geom_line(size = 1.5) +
+  geom_point(size = 3) +
+  geom_smooth (method = "lm", se = FALSE, col = "coral3") +
+  facet_wrap( ~ Sampling_Frame, ncol = 1) +
+  scale_x_continuous(breaks = seq(2010, 2023, by = 2))+
+  labs(
+    title = "2010 to 2023 Detection of Invasive Species for Each Site\non the Big Island of Hawai'i",
+    x = "Year",
+    y = "Total Species Count",
+    color = "Site"
+  ) +
+  scale_color_manual(values = c("Mauna Loa" = "orange2",
+                    "Olaa" = "steelblue",
+                    "Nahuku / East Rift" = "lightblue"))
+invasion.time.plot
+```
+
+Figure 4.3.1 displays a total invasive species count over time across study regions. This count includes multiple observations of the same species at a given sample site. It appears that while levels have fluctuated in the past 12-13 years, there has been an overall decrease in invasive species counts across all three regions. Mauna Loa is experiencing the greatest decrease with about 3 less invasive species counted annually. Nahuku / East Rift is declining by approximately 0.6558 species per year. Ola’a has experienced little to no fluctuation in the number of invasive species with an average decline of 0.1059 species annually. One important feature to note are the points on the graph representing the times that each region was sampled. Given that these sampling windows are limited and occurred sporadically throughout the time span, trends observed are likely not very substantial but do warrant further investigation.
+
+# Summary and Conclusions
+Our results show that invasive species richness does change across the sample regions. Figure __ (the bar chart) displays the overall invasive species richness across the 13-year sampling protocol. Ola’a appears to have the greatest species richness across the study regions, followed by Nahuku / East Rift. Mauna Loa has the least species richness out of the three regions. This finding was somewhat supported by our ANOVA (analysis of variance) and Tukey Post-Hoc test, which found that Ola’a has significantly higher invasive species richness in comparison to Mauna Loa. There is no statistically significant difference between Ola’a & Nahuku / East Rift and Mauna Loa and Nahuku / East Rift. 
+
+Our findings also suggest that structural diversity changes across all three of the sample regions. Figure __ (the other bar chart) demonstrates that Mauna Loa only hosted invasive grasses, herbs, rushes, and shrubs whereas Nahuku / East Rift and Ola’a supported some combination of all nine of possible vegetation types. Our analysis via Tukey multiple comparisons of means on an ANOVA test reveals that there are statistically significant differences between all three regions. Mauna Loa has the least structural diversity of the three regions, followed by Nahuku / East Rift with an intermediary level of structural diversity. Ola’a is the most diverse in number of vegetation types at a given sampling point.
+
+These phenomena are likely attributed to:
+Higher resource availability in wet forest habitat types
+Less human/animal activity to disperse propagules in subalpine shrubland habitats
+Wider range of ecological niches for invasive species to occupy in wet forest habitat types 
+Altitude, soil moisture, and wind pattern differences among habitat types
+Reduced physical barriers in wet forest habitat types
+less steep terrain
+ increased connectivity with other habitat types
+
+However, further analysis and data regarding elevation, rainfall, wind, and other potential drivers are required to confirm these theories as they pertain to our specific dataset. While we had two wet forest habitats to compare, our analysis would be made stronger if we had additional subalpine shrubland regions to confirm if the patterns we observed on Mauna Loa can be extrapolated to this habitat type as a whole on the Big Island of Hawai’i. 
+
+Trends varied across time. Throughout the three study regions, the number of invasive plants counted decreased on average. Though our time series results are likely anecdotal, some claims are somewhat substantiated by research conducted on the Big Island. One paper found that “while most of the area occupied by invasive species increased in size, the area of two highly invasive species occupying upper elevation wet forest decreased dramatically” (Cordell 2021). A useful next step in exploring these trends would be to have a longer timeline of invasive species spread. While our findings suggest that invasive species populations are largely stable across the study regions, this may be an outlier in the long-term trends of the island. Further, as we only have three study regions to pull data from, we are only able to speak to the local trends at these sites. Perhaps the increased protectivity within the Hawai’i Volcanoes National Park has allowed these regions to maintain or even decrease invasive species counts, whereas the rest of the Big Island has an entirely different experience. 
+
+Understanding regional trends in invasive species populations is key to informing best practices for land management, tailoring restoration techniques on a case-by-case basis. Invasive species aren’t the only threat to the endemic plants of Hawai’i, instead “extinction is projected for some native plant populations when habitat area is defined by climatic envelopes is impinged by sea level rise on the lower end and elevation at the upper end” (Fortini et al., 2013). This may put high-elevation sites such as Mauna Loa at greater risk of losing native plants, which is only exacerbated by added competition from invasive species. 
+
+# References
+Ainsworth, A., & Drake, D. R. (2024). Hawaiian treeline ecotones: Implications for plant community conservation under climate change. Plants, 13(1), 123.
+
+```{r add report to our repository, include = FALSE}
+#COPY/PASTE IN CONSOLE to update and get html in our working directory files
+#rmarkdown::render("MilesflynnRoybal_ENV872_EDA_FinalProject.Rmd", output_format = "bookdown::html_document2")
+```
+
