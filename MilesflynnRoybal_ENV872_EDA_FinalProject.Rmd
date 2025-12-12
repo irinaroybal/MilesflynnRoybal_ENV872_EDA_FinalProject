@@ -437,6 +437,59 @@ ggplot() +
        color = "Invasive Species Code")
 ```
 
+Asian Sword Fern (*Nephrolepis brownii*) is the most abundant invasive
+fern across all sites and share similar plant physiology traits to the
+endemic Sword Fern species in the Nahuku/East Rift site (National Park
+Service 2021 and “NEPBRO” in Figure \@ref(fig:fern) . Both invasive
+grasses and herbaceous species are the most diverse and abundant with
+over 20 different taxa. Palm Grass (Setaria palmifolia), Himalayan
+Ginger (*Hedychium gardnerianum*), and Hairy Cat’s Ear (*Hypochaeris
+radicata*) account for over 750 observations in the dataset (“SETPAL”,
+“HEDGAR”, and “HYPRAD1” in Figures \@ref(fig:grass) and
+\@ref(fig:herb)).
+
+No invasive sedge, tree, tree fern, or vine species were recorded in
+Mauna Loa (Figures \@ref(fig:sedge), \@ref(fig:tree), \@ref(fig:fern),
+\@ref(fig:vine). Displaying invasive fern and shrub species counts under
+Mauna Loa in Figures \@ref(fig:fern) and \@ref(fig:shrub) was difficult
+because both vegetation types had only one observation in the sample
+region. This supports the claim that harsher environmental conditions in
+subalpine shrublands limit the establishment of many species,
+particularly those with larger biomasses that require considerable
+resources. The Hawai’i Invasive Species Council (HISC), under the State
+of Hawai’i government, has composed a subset list of invasive species
+with funding for research, prevention, and control actions.
+
+In Figure \@ref(fig:SpecificSpeciesMappingExploration), we created a map
+showing the spatial distribution of nine high‑risk invasive species
+according to the Risk for the Hawai‘i‑Pacific Weed Risk Assessment
+Score. A common life strategy of high‑risk invasive species is rapid
+growth and seed dispersal that outcompete native species. Common Rush
+(*Juncus effusus*) and Himalayan Ginger require minimal resources to
+outcompete native understory species (Hawaii Invasive Species Council
+2025, “JUNEFF” and “HEDGAR” in Figure \@ref(fig:herb)). Both Common Rush
+and Fireweed (*Senecio madagascariensis*) are situated closer to Mauna
+Loa on the bottom left of the map. Fireweed should be a primary invasive
+removal priority for Mauna Loa because it typically grows in humid
+subtropical conditions and is toxic to livestock, causing liver
+malfunction (Hawaii Invasive Species Council 2025).
+
+The other seven high‑risk invasive species are widely clustered in the
+two wet forest habitats (Figure
+\@ref(fig:SpecificSpeciesMappingExploration)). Fire Tree (*Morella
+faya*) and Strawberry Guava Tree (*Psidium cattleianum*) are the only
+invasive tree species found on the Big Island (“MORFAY” and “PSICAT” in
+Figure \@ref(fig:tree)). These tree species outcompete native wet forest
+plants by forming dense thickets that block sunlight and alter soil
+nitrogen levels, creating conditions more favorable for other invasive
+species. According to literature, Himalayan Raspberry (*Rubus
+ellipticus*), Banana Poka (*Passiflora terminiana*), Cane Tibouchina
+(*Tibouchina herbaceae*), and Australian Tree Fern (*Cyathea cooperi*)
+are typically found in disturbed areas (“RUBELL”, “PASTAR”, “TIBHER”,
+and “SPHCOO” in Figure \@ref(fig:herb)). Their prevalence can serve as
+indicators for park managers to identify disturbed areas in need of
+future restoration efforts.
+
 ## Diversity of Invasive Species Across Habitat Type {.tabset}
 
 ### FERN
